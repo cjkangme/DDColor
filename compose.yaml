@@ -1,0 +1,13 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0"]
+              capabilities: [gpu]
+    command: sh -c "python3 setup.py develop && python data_list/get_meta_file.py --output-name custom.txt --data-path ./ && python data_list/get_meta_file.py --output-name val.txt --data-path ../val_list && sh scripts/train.sh"
